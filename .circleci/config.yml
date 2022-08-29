@@ -128,9 +128,13 @@ jobs:
 
   deploy-infrastructure:
     docker:
-      -image: amazon/aws-cli
+      - image: amazon/aws-cli
     steps:
       - checkout
+      - run:
+          name : get name of aws iam user
+          command: |
+            aws sts get-caller-identity
       - run:
           name: Install tar gzip
           command: |
