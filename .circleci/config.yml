@@ -26,7 +26,7 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            SUCCESS = $(curl --insecure https://kvdb.io/G8Bqnqr7YdqR2vrN8kqqL3/migration_<< parameters.workflow_id >>)
+            SUCCESS=$(curl --insecure https://kvdb.io/G8Bqnqr7YdqR2vrN8kqqL3/migration_<< parameters.workflow_id >>)
             echo $SUCCESS
             if(( $SUCCESS==1 ))
             then
@@ -228,14 +228,14 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/
       - run:
           name: Install dependencies
           command: |
             yum install -y tar gzip
             curl -sL https://rpm.nodesource.com/setup_lts.x | bash -
             yum install -y nodejs
+      - attach_workspace:
+          at: ~/
       - run:
           name: Get backend url
           command: |
