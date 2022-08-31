@@ -277,9 +277,11 @@ jobs:
             pip install --upgrade pip
             pip install awscli
       - run:
-          name: Add Env vars
+          name: Add Environment Vars to backend
           command: |
-            echo ENVIROMENT=production > "backend/dist/.env"
+            pwd
+            cd /root/project/
+            echo ENVIROMENT=development > "backend/dist/.env"
             echo TYPEORM_CONNECTION=postgres >> "backend/dist/.env"
             echo TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js} >> "backend/dist/.env"
             echo TYPEORM_HOST=$TYPEORM_HOST >> "backend/dist/.env"
@@ -297,7 +299,7 @@ jobs:
             npm run build
             cd ..
             # Zip the directory
-            tar -C backend -czvf artifact.tar.gz .
+            tar -C backend -czvf artifact.tar.gz . > /dev/null 2>&1
             ls
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
