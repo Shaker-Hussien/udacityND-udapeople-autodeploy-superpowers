@@ -280,7 +280,14 @@ jobs:
             pip install --upgrade pip
             pip install awscli
       - run:
-          name: Add Environment Vars to backend
+          name: Build backend
+          command: |
+            cd backend
+            npm i
+            npm run build
+            echo "Backend build finished successfully"
+      - run:
+          name: Add Environment Vars to backend build files
           command: |
             echo ENVIROMENT=development > "backend/dist/.env"
             echo TYPEORM_CONNECTION=postgres >> "backend/dist/.env"
@@ -295,10 +302,9 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-            cd backend
-            npm i
-            npm run build
-            cd ..
+            pwd
+            ls           
+            cd /root/project
             # Zip the directory
             tar -C backend -czvf artifact.tar.gz . > /dev/null 2>&1
             ls
