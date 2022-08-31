@@ -277,8 +277,6 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update curl tar gzip ansible nodejs npm
-            pip install --upgrade pip
-            pip install awscli
       - run:
           name: Build backend
           command: |
@@ -323,7 +321,6 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update curl nodejs npm
-            pip install --upgrade pip
             pip install awscli
       - run:
           name: Get backend url
