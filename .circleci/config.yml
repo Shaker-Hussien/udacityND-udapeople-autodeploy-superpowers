@@ -220,6 +220,7 @@ jobs:
             then
                 curl --insecure https://kvdb.io/G8Bqnqr7YdqR2vrN8kqqL3/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
+            curl --insecure https://kvdb.io/G8Bqnqr7YdqR2vrN8kqqL3/migration_${CIRCLE_WORKFLOW_ID:0:7}
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}     
 
