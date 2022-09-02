@@ -213,7 +213,6 @@ jobs:
           command: |
             cd backend
             npm install
-            npm run build
             npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
       - run:
@@ -223,9 +222,10 @@ jobs:
             then
                 curl --insecure https://kvdb.io/G8Bqnqr7YdqR2vrN8kqqL3/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
-            curl --insecure https://kvdb.io/G8Bqnqr7YdqR2vrN8kqqL3/migration_${CIRCLE_WORKFLOW_ID:0:7}
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}     
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
+      - revert-migrations:      
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}    
 
   deploy-frontend:
     docker:
@@ -438,8 +438,8 @@ workflows:
               only: [master]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
-      # - run-migrations:
-      #     requires: [configure-infrastructure]
+      - run-migrations:
+          requires: [configure-infrastructure]
       # - deploy-frontend:
       #     requires: [run-migrations]
       # - deploy-backend:
