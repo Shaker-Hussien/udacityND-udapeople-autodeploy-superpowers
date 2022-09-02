@@ -407,7 +407,7 @@ jobs:
             if [[ $OldWorkflowID == "" ]]
             then
               echo "No OldWorkflowID found."
-            elif  [[ "${CIRCLE_WORKFLOW_ID:0:7}" =~ "${OldWorkflowID}" ]]
+            elif  [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
             then
               echo "Delete old stack"
               aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
