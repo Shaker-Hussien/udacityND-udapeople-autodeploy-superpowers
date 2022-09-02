@@ -289,7 +289,7 @@ jobs:
           name: Package backend
           command: |
             cd backend
-            tar -czvf artifact.tar.gz dist/* package/*
+            tar -czvf artifact.tar.gz dist/* package*
             ls
             cd ..
             cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
@@ -363,18 +363,18 @@ jobs:
           command: |
             # get OldWorkflowID
             export OldWorkflowID=$(aws cloudformation \
-              list-exports --query "Exports[?contains(Name, \`WorkflowID\`) == \`true\`].Value" \
-              --no-paginate --output text)
-              echo $OldWorkflowID
+                      list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+                      --no-paginate --output text)
+            echo OldWorkflowID: "${OldWorkflowID}"
             
             # save OldWorkflowID to kvdb
             curl --insecure https://kvdb.io/G8Bqnqr7YdqR2vrN8kqqL3/OldWorkflowID  -d "${OldWorkflowID}"
 
+            # update WorkflowID in InitialStack
             aws cloudformation deploy \
               --template-file .circleci/files/cloudfront.yml \
-              --stack-name "InitialStack-${OldWorkflowID}" \
               --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
-              --tags project=udapeople
+              --stack-name InitialStack
       - destroy-environment
       - revert-migrations
 
@@ -436,7 +436,7 @@ workflows:
           requires: [run-migrations]
       - smoke-test:
           requires: [deploy-backend, deploy-frontend]
-      # - cloudfront-update:
-      #     requires: [smoke-test]
+      - cloudfront-update:
+          requires: [smoke-test]
       # - cleanup:
       #     requires: [cloudfront-update]
